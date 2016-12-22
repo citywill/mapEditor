@@ -1,3 +1,13 @@
+<?php
+
+$jsonPath = './data';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    include 'draw-save.php';
+    die();
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -82,11 +92,6 @@
 
 var mapId = 220100;
 
-//从网址hash获取mapId，默认为长春市
-//var mapId = location.hash?location.hash.substring(1):220100;
-
-//console.log(mapId);
-
 // 百度地图API功能，关闭底图可点功能
 var map = new BMap.Map('map', {enableMapClick:false});
 
@@ -163,13 +168,13 @@ $('.draw-delete').on('click', deleteDraw());
 $('.draw-save').on('click', function() {
     $.ajax({
         "method": "POST",
-        "url": "draw-save.php",
+        "url": "index.php",
         "data": {
             "id": mapId,
             "data": areaDraw.ro
         },
         "success": function(e){
-            //alert(e);
+            alert(e);
             showMap(mapId);
             deleteDraw();
             $('.draw-save').attr('disabled','disabled');
