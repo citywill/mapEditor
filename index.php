@@ -75,17 +75,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <div id="tools" style="display: none;">
             <button class="btn btn-primary draw-create">绘制新区域</button>
-            <button class="btn btn-success draw-save" disabled="disabled">保存区域</button>
-            <button class="btn btn-danger draw-delete" disabled="disabled">删除区域</button>
         </div>
 
     </div>
+</div>
+
+
+<div class="modal modal-new-draw bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close draw-delete" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">新建区域</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default draw-delete">取消</button>
+        <button type="button" class="btn btn-primary draw-save">保存</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 </body>
 </html>
 
 <script src="./assets/.3.1.1@jquery/dist/jquery.min.js"></script>
+<script src="./assets\.3.3.7@bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="./assets/jq-track-mouse.min.js"></script>
 
 <script type="text/javascript">
@@ -135,8 +153,9 @@ var areaDraw;
 //添加鼠标绘制工具监听事件，用于获取绘制结果
 drawingManager.addEventListener('overlaycomplete', function(e){
     areaDraw = e.overlay;
-    $(".draw-save").removeAttr('disabled');
-    $(".draw-delete").removeAttr('disabled');
+
+    //显示莫太狂
+    $('.modal-new-draw').modal('show');
 });
 
 /**
@@ -156,8 +175,7 @@ var deleteDraw = function() {
     map.removeOverlay(areaDraw);
     areaDraw = null;
     $('.draw-create').removeAttr('disabled');
-    $('.draw-save').attr('disabled','disabled');
-    $('.draw-delete').attr('disabled','disabled');
+    $('.modal-new-draw').modal('hide');
 }
 
 $('.draw-delete').on('click', deleteDraw());
@@ -174,12 +192,10 @@ $('.draw-save').on('click', function() {
             "data": areaDraw.ro
         },
         "success": function(e){
-            alert(e);
             showMap(mapId);
             deleteDraw();
-            $('.draw-save').attr('disabled','disabled');
-            $('.draw-delete').attr('disabled','disabled');
             $('.draw-create').removeAttr('disabled');
+            $('.modal-new-draw').modal('hide');
         }
     });
 });
