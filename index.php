@@ -3,7 +3,7 @@
 $jsonPath = './data';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include 'draw-save.php';
+    include 'draw.php';
     die();
 }
 ?>
@@ -89,7 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h4 class="modal-title" id="myModalLabel">新建区域</h4>
       </div>
       <div class="modal-body">
-        ...
+          <div class="form-group">
+            <label for="form-area-name">区域名称</label>
+            <input type="email" class="form-control" id="form-area-name" placeholder="">
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default draw-delete">取消</button>
@@ -103,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </html>
 
 <script src="./assets/.3.1.1@jquery/dist/jquery.min.js"></script>
-<script src="./assets\.3.3.7@bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="./assets/.3.3.7@bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="./assets/jq-track-mouse.min.js"></script>
 
 <script type="text/javascript">
@@ -120,9 +123,8 @@ map.centerAndZoom("长春 人民广场");
 //var map = new BMap.Map("allmap");
 
 //单击获取点击的经纬度
-
 map.addEventListener("click",function(e){
-    console.log(e.point.lng + "," + e.point.lat);
+    //console.log(e.point.lng + "," + e.point.lat);
 });
 /**/
 
@@ -147,6 +149,12 @@ var drawingManager = new BMapLib.DrawingManager(map, {
     polygonOptions: styleOptions, //多边形的样式
 });
 
+//初始化模态框
+$('.modal-new-draw').modal({
+  keyboard: false,
+  show: false
+});
+
 //绘制区域
 var areaDraw;
 
@@ -154,7 +162,7 @@ var areaDraw;
 drawingManager.addEventListener('overlaycomplete', function(e){
     areaDraw = e.overlay;
 
-    //显示莫太狂
+    //显示模态框
     $('.modal-new-draw').modal('show');
 });
 
@@ -178,7 +186,7 @@ var deleteDraw = function() {
     $('.modal-new-draw').modal('hide');
 }
 
-$('.draw-delete').on('click', deleteDraw());
+$('.draw-delete').on('click', deleteDraw);
 
 /**
  * 保存绘制区域
@@ -189,6 +197,7 @@ $('.draw-save').on('click', function() {
         "url": "index.php",
         "data": {
             "id": mapId,
+            "name": $('#form-area-name').val(),
             "data": areaDraw.ro
         },
         "success": function(e){
@@ -196,6 +205,7 @@ $('.draw-save').on('click', function() {
             deleteDraw();
             $('.draw-create').removeAttr('disabled');
             $('.modal-new-draw').modal('hide');
+            $('#form-area-name').val('');
         }
     });
 });
@@ -262,6 +272,8 @@ var showMap = function(mapDataId){
                 $.trackMouse({
                     "text":regin.properties.name,
                 });
+                //$.trackMouse().reset();
+                //$(this).removeEventListener();
                 $('#status').html(
                     data.name +
                     regin.properties.name

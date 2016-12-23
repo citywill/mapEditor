@@ -2,6 +2,7 @@
 //var_dump($_POST);die();
 
 $mapId = $_POST['id'];
+$name = $_POST['name'];
 $data = $_POST['data'];
 
 foreach ($data as $key => $value) {
@@ -17,7 +18,7 @@ $jsonData = json_decode($jsonData, true);
 $jsonData['regins'][] = array(
 
     'properties' => array(
-        'name' => '新社区',
+        'name' => $name,
         'id' => '23232323',
     ),
 
