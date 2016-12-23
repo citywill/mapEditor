@@ -55,13 +55,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <div class="page-header">
 
-        <div id="nav" class="pull-right">
-            <a class="goback btn btn-primary" style="display: none;" href="javascript:void(0)">
+        <div id="nav" class="pull-right" style="padding-top:10px;">
+
+            <button class="btn btn-primary draw-create" disabled="disabled">绘制新区域</button>
+
+            <button class="goback btn btn-primary" disabled="disabled">
                 返回<span class="target"></span>
-            </a>
+            </button>
         </div>
 
-        <h1>地图编辑器 <small></small></h1>
+        <h1>
+            地图编辑器
+            <small>
+                【<span class="local"></span>】
+                <span class="tip">请点击区县进入编辑</span>
+            </small>
+        </h1>
 
     </div>
 
@@ -69,15 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div id="map" style="height:100%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;"></div>
     </div>
 
-    <div class="bar" style="padding-top:20px;">
+    <div id="status"></div>
 
-        <div id="status" class="pull-right"></div>
-
-        <div id="tools" style="display: none;">
-            <button class="btn btn-primary draw-create">绘制新区域</button>
-        </div>
-
-    </div>
 </div>
 
 
@@ -192,6 +194,11 @@ $('.draw-delete').on('click', deleteDraw);
  * 保存绘制区域
  */
 $('.draw-save').on('click', function() {
+
+    if($('#form-area-name').val() == ''){
+        alert('请定义区域名称');
+        return false;
+    }
     $.ajax({
         "method": "POST",
         "url": "index.php",
@@ -239,7 +246,7 @@ var showMap = function(mapDataId){
         map.centerAndZoom(poi, data.zoom);
 
         //标题和提示内容
-        $('h1 small').html(data.name);
+        $('h1 small .local').html(data.name);
         $('#status').html(data.name);
 
         //遍历区域
@@ -294,22 +301,21 @@ var showMap = function(mapDataId){
 
         //如果有上级则显示导航，否则关闭
         if(data.parent) {
-            $('#nav .goback .target').html(data.parent.name);
-            $('#nav .goback').show();
-            $('#nav .goback').on('click', function(){
+            $('.goback .target').html(data.parent.name);
+            $('.goback').removeAttr('disabled');
+            $('.goback').on('click', function(){
                 showMap(data.parent.id);
                 //location.hash = '#' + data.parent.id;
-                $(this).hide();
             });
         } else {
-            $('#nav .goback').hide();
+            $('.goback').attr('disabled','disabled');
         }
 
         //如果地图类型为区则显示社区绘制工具
         if(data.parent) {
-            $('#tools').show();
+            $('.draw-create').removeAttr('disabled');
         } else {
-            $('#tools').hide();
+            $('.draw-create').attr('disabled','disabled');
         }
     });
 }
