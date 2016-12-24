@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </div>
 
-
+<!-- 建设新区的模态框 -->
 <div class="modal modal-new-draw bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
@@ -95,6 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="form-area-name">区域名称</label>
             <input type="email" class="form-control" id="form-area-name" placeholder="">
           </div>
+          <div class="form-group">
+            <label for="form-area-id">区域Id</label>
+            <input type="email" class="form-control" id="form-area-id" placeholder="">
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default draw-delete">取消</button>
@@ -103,6 +107,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
   </div>
 </div>
+
+<!-- 修改区域的模态框 -->
+<div class="modal modal-map bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close draw-delete" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">区域编辑</h4>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+            <label for="form-area-name">区域名称</label>
+            <input type="email" class="form-control" id="form-area-name" placeholder="">
+          </div>
+          <div class="form-group">
+            <label for="form-area-id">区域Id</label>
+            <input type="email" class="form-control" id="form-area-id" placeholder="">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger map-delete">删除区域</button>
+        <button type="button" class="btn btn-success map-enter">进入区域</button>
+        <button type="button" class="btn btn-primary map-save">保存修改</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 </body>
 </html>
@@ -114,6 +146,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <script type="text/javascript">
 
 var mapId = 220100;
+
+var nextMapId = '';
 
 // 百度地图API功能，关闭底图可点功能
 var map = new BMap.Map('map', {enableMapClick:false});
@@ -153,6 +187,12 @@ var drawingManager = new BMapLib.DrawingManager(map, {
 
 //初始化模态框
 $('.modal-new-draw').modal({
+  keyboard: false,
+  show: false
+});
+
+//初始化模态框
+$('.modal-map').modal({
   keyboard: false,
   show: false
 });
@@ -203,8 +243,9 @@ $('.draw-save').on('click', function() {
         "method": "POST",
         "url": "index.php",
         "data": {
-            "id": mapId,
+            "mapid": mapId,
             "name": $('#form-area-name').val(),
+            "id": $('#form-area-id').val(),
             "data": areaDraw.ro
         },
         "success": function(e){
@@ -217,6 +258,15 @@ $('.draw-save').on('click', function() {
     });
 });
 
+/**
+ * 进入区域
+ */
+var enterArea = function() {
+    showMap(nextMapId);
+    $('.modal-map').modal('hide');
+}
+
+$('.map-enter').on('click', enterArea);
 
 //已有区域
 var areas = [];
@@ -237,7 +287,7 @@ var clearMap = function() {
 var showMap = function(mapDataId){
 
     //显示已经存在的覆盖数据
-    $.getJSON('./data/' + mapDataId + '.json', function(data){
+    $.getJSON('./data/'+mapDataId+'.json', function(data){
 
         clearMap();
 
@@ -289,13 +339,20 @@ var showMap = function(mapDataId){
 
             //点击一个区域
             areas[i].addEventListener("click",function(){
-                if(data.type=='regin'){
-                    return false;
-                } else {
-                    //todo:如果该区域没有json数据，则ajax创建一个
-                    mapId = regin.properties.id;
-                    showMap(mapId);
-                }
+
+                $('.modal-map').modal('show');
+
+                nextMapId = regin.properties.id;
+
+                console.log(regin.properties.id);
+
+                // if(data.type=='regin'){
+                //     return false;
+                // } else {
+                //     //todo:如果该区域没有json数据，则ajax创建一个
+                //     mapId = regin.properties.id;
+                //     showMap(mapId);
+                // }
             });
         });
 

@@ -1,8 +1,9 @@
 <?php
 //var_dump($_POST);die();
 
-$mapId = $_POST['id'];
+$mapId = $_POST['mapid'];
 $name = $_POST['name'];
+$id = $_POST['id'];
 $data = $_POST['data'];
 
 foreach ($data as $key => $value) {
@@ -19,7 +20,7 @@ $jsonData['regins'][] = array(
 
     'properties' => array(
         'name' => $name,
-        'id' => '23232323',
+        'id' => $id,
     ),
 
     'geometry' => array(
