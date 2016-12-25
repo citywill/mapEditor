@@ -7,8 +7,8 @@
     43.8926
   ],
   "zoom": 8,
-  "regins": [
-    {
+  "regins": {
+    "220103":{
       "type": "Feature",
       "properties": {
         "name": "宽城区",
@@ -288,7 +288,7 @@
         ]
       }
     },
-    {
+    "220106":{
       "type": "Feature",
       "properties": {
         "name": "绿园区",
@@ -400,7 +400,7 @@
         ]
       }
     },
-    {
+    "220104":{
       "type": "Feature",
       "properties": {
         "name": "朝阳区",
@@ -604,7 +604,7 @@
         ]
       }
     },
-    {
+    "220124":{
       "type": "Feature",
       "properties": {
         "name": "德惠市",
@@ -996,7 +996,7 @@
         ]
       }
     },
-    {
+    "220105":{
       "type": "Feature",
       "properties": {
         "name": "二道区",
@@ -1256,7 +1256,7 @@
         ]
       }
     },
-    {
+    "220123":{
       "type": "Feature",
       "properties": {
         "name": "九台市",
@@ -1684,7 +1684,7 @@
         ]
       }
     },
-    {
+    "220102":{
       "type": "Feature",
       "properties": {
         "name": "南关区",
@@ -1920,7 +1920,7 @@
         ]
       }
     },
-    {
+    "220122":{
       "type": "Feature",
       "properties": {
         "name": "农安县",
@@ -2500,7 +2500,7 @@
         ]
       }
     },
-    {
+    "220125":{
       "type": "Feature",
       "properties": {
         "name": "双阳区",
@@ -2732,7 +2732,7 @@
         ]
       }
     },
-    {
+    "220121":{
       "type": "Feature",
       "properties": {
         "name": "榆树市",
@@ -3208,5 +3208,5 @@
         ]
       }
     }
-  ]
+  }
 }

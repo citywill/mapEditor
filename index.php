@@ -68,11 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             地图编辑器
             <small>
                 【<span class="local"></span>】
-                <span class="tip">请点击区县进入编辑</span>
             </small>
         </h1>
 
     </div>
+
+    <div class="alert alert-info" role="alert">请点击区域编辑。绘制新区域请点击右上角按钮，然后再地图上单击绘制，双击结束绘制。</div>
+
 
     <div id="allmap" style="overflow:hidden;zoom:1;position:relative;">
         <div id="map" style="height:100%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;"></div>
@@ -93,11 +95,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <div class="modal-body">
           <div class="form-group">
             <label for="form-area-name">区域名称</label>
-            <input type="email" class="form-control" id="form-area-name" placeholder="">
+            <input type="text" class="form-control" id="form-area-name" placeholder="">
           </div>
           <div class="form-group">
             <label for="form-area-id">区域Id</label>
-            <input type="email" class="form-control" id="form-area-id" placeholder="">
+            <input type="text" class="form-control" id="form-area-id" placeholder="">
           </div>
       </div>
       <div class="modal-footer">
@@ -109,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </div>
 
 <!-- 修改区域的模态框 -->
-<div class="modal modal-map bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div class="modal modal-map" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
@@ -119,17 +121,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <div class="modal-body">
           <div class="form-group">
             <label for="form-area-name">区域名称</label>
-            <input type="email" class="form-control" id="form-area-name" placeholder="">
+            <input type="text" class="form-control" id="form-area-name" placeholder="">
           </div>
           <div class="form-group">
             <label for="form-area-id">区域Id</label>
-            <input type="email" class="form-control" id="form-area-id" placeholder="">
+            <input type="text" class="form-control" id="form-area-id" placeholder="">
           </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger map-delete">删除区域</button>
         <button type="button" class="btn btn-success map-enter">进入区域</button>
         <button type="button" class="btn btn-primary map-save">保存修改</button>
+        <button type="button" class="btn btn-danger map-delete">删除区域</button>
       </div>
     </div>
   </div>
@@ -341,6 +343,21 @@ var showMap = function(mapDataId){
             areas[i].addEventListener("click",function(){
 
                 $('.modal-map').modal('show');
+
+                if(data.type=='city'){
+                    $('.modal-map .map-delete').hide();
+                    $('.modal-map .map-save').hide();
+                    $('.modal-map #form-area-name').attr('disabled','disabled');
+                    $('.modal-map #form-area-id').attr('disabled','disabled');
+                } else {
+                    $('.modal-map .map-delete').show();
+                    $('.modal-map .map-save').show();
+                    $('.modal-map #form-area-name').removeAttr('disabled');
+                    $('.modal-map #form-area-id').removeAttr('disabled');
+                }
+
+                $('.modal-map #form-area-name').val(regin.properties.name);
+                $('.modal-map #form-area-id').val(regin.properties.id);
 
                 nextMapId = regin.properties.id;
 
