@@ -1,4 +1,9 @@
 <?php
+/**
+ * 保存一个绘制区域
+ */
+
+include 'config.php';
 //var_dump($_POST);die();
 
 $mapId = $_POST['mapid'];

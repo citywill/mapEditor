@@ -1,12 +1,4 @@
-<?php
-
-$jsonPath = './data';
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include 'draw.php';
-    die();
-}
-?>
+<?php include 'config.php';?>
 
 <!DOCTYPE html>
 <html>
@@ -243,7 +235,7 @@ $('.draw-save').on('click', function() {
     }
     $.ajax({
         "method": "POST",
-        "url": "index.php",
+        "url": "draw-save.php",
         "data": {
             "mapid": mapId,
             "name": $('#form-area-name').val(),
@@ -289,7 +281,7 @@ var clearMap = function() {
 var showMap = function(mapDataId){
 
     //显示已经存在的覆盖数据
-    $.getJSON('./data/'+mapDataId+'.json', function(data){
+    $.getJSON('area-show.php?area='+mapDataId, function(data){
 
         clearMap();
 
@@ -328,10 +320,11 @@ var showMap = function(mapDataId){
 
             //对多边形定义鼠标提示事件
             areas[i].addEventListener("mouseover",function(){
+
+                /*$.trackMouse().reset();
                 $.trackMouse({
                     "text":regin.properties.name,
-                });
-                //$.trackMouse().reset();
+                });*/
                 //$(this).removeEventListener();
                 $('#status').html(
                     data.name +
